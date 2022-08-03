@@ -1,13 +1,32 @@
 <script lang="ts" setup>
   import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
+  import API from '../axios'
+  import { ElLoading } from 'element-plus'
+  import { ElMessageBox } from 'element-plus'
   
-  const link=ref([{}])
   const text=ref('')
-  const router=useRouter()
 
   function fetch_link(){
-    router.push({name:'select',params:{url:text.value}})
+    const loading = ElLoading.service({ fullscreen: true })
+    API({method:'POST',url:'/download',data:{'url':text.value},responseType:'blob'})
+    .then((res)=>{
+      loading.close()
+      const blob = new Blob([res.data]);
+      const fileName = 'Result.pptx';
+      const down = document.createElement('a');
+      down.download = fileName;
+      down.style.display = 'none';
+      down.href = URL.createObjectURL(blob);
+      document.body.appendChild(down);
+      down.click();
+      URL.revokeObjectURL(down.href);
+      document.body.removeChild(down);
+      ElMessageBox.alert('下载成功！','提示',{center:true})
+      })
+    .catch((error)=>{
+      loading.close()
+      ElMessageBox.alert('请输入正确的微信公众号网址', '错误',{center:true})
+      });
   }
 
   function reset(){
@@ -32,7 +51,7 @@
 
 <style>
 .Input{
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 40%;
   transform: translate(-50%, -50%);

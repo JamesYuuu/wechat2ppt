@@ -19,7 +19,4 @@ class PictureSpider(object):
                 id=id+1
                 link.append({'id':id,'url':url,'width':width,'ratio':ratio})
         
-        with open('./image/link.json','w+') as f:
-            f.write(json.dumps(link))
-        
         return link
