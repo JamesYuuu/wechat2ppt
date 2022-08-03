@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import json
 
 class PictureSpider(object):
     def __init__(self,url):
@@ -17,9 +18,8 @@ class PictureSpider(object):
             if url and width and ratio:
                 id=id+1
                 link.append({'id':id,'url':url,'width':width,'ratio':ratio})
+        
+        with open('./image/link.json','w+') as f:
+            f.write(json.dumps(link))
+        
         return link
-
-
-'''
-url='https://mp.weixin.qq.com/s/9a5yTe0RACXLM3Pqqb9sRg'
-'''
