@@ -40,6 +40,6 @@ class ppt(object):
 
         for file in sorted(os.listdir('./image'),key=lambda x:int(x.split('.')[0])):
             slide = ppt.slides.add_slide(ppt.slide_layouts[3])
-            slide.shapes.add_picture(f'.\image\{file}',0,0,ppt.slide_width,ppt.slide_height)
+            slide.shapes.add_picture(f'./image/{file}',0,0,ppt.slide_width,ppt.slide_height)
 
         ppt.save('./image/result.pptx')
