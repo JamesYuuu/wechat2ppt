@@ -14,7 +14,9 @@ async def download(request: Request) -> HTTPResponse:
     width=[item['width'] for item in link]
     ratio=[item['ratio'] for item in link]
 
-    pptx=ppt(link,max(width,key=width.count),max(ratio,key=ratio.count))
+    max_width = max(width,key=width.count)
+
+    pptx=ppt(link,max_width,ratio[width.index(max_width)])
     await pptx.make_ppt()
 
     return await response.file_stream('image/result.pptx')

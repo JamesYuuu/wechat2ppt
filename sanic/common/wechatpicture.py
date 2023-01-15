@@ -18,5 +18,4 @@ class PictureSpider(object):
             if url and width and ratio:
                 id=id+1
                 link.append({'id':id,'url':url,'width':width,'ratio':ratio})
-        
         return link
