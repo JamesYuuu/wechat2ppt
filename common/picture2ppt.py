@@ -1,5 +1,4 @@
 import collections.abc
-import imghdr
 import pptx
 import os
 from PIL import Image
@@ -13,19 +12,21 @@ class ppt(object):
         self.link=link
         self.width=width
         self.ratio=ratio
+
+        print(self.width,self.ratio)
     
-    async def save_image(self,img_src,id):
+    def save_image(self,img_src,id):
         image=Image.open(BytesIO(requests.get(img_src).content))
         image=image.resize((int(1080/float(self.ratio)),1080),resample=Image.Resampling.BICUBIC)
         file='./image/'+str(id)+'.png'
         image.save(file)
 
-    async def download_image(self):
+    def download_image(self):
         for data in self.link:
             if data['width']==self.width and data['ratio']==self.ratio:
-                await self.save_image(data['url'],data['id'])
+                self.save_image(data['url'],data['id'])
 
-    async def make_ppt(self):
+    def make_ppt(self):
 
         ppt=pptx.Presentation()
     
@@ -36,7 +37,7 @@ class ppt(object):
             shutil.rmtree('./image')
         os.mkdir('./image')
 
-        await self.download_image()
+        self.download_image()
 
         for file in sorted(os.listdir('./image'),key=lambda x:int(x.split('.')[0])):
             slide = ppt.slides.add_slide(ppt.slide_layouts[3])
